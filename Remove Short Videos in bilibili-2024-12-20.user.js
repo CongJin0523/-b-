@@ -14,22 +14,29 @@
 
     const targetNode = document.querySelector('.rec-footer');
     const config = {characterData: true, attributes: true, subtree: true};
-    const observer = new MutationObserver((mutationList, observer) => {
-        setTimeout(() => {
+    function startTimer(){
+        let count = 0;
+        let timer = setInterval(() => {
+            count++;
             console.log(`Remove short video`);
             removeShortVideoAndAd();
-        }, 3000);
-
+            if (count === 10) {
+                clearInterval(timer);
+                count = 0;// Stops the interval after 5 seconds
+                console.log("Timer stopped.");
+            }
+        }, 1000);
+    }
+    startTimer();
+    const observer = new MutationObserver((mutationList, observer) => {
+        startTimer();
     });
     observer.observe(targetNode, config);
 
 
     const videoElement = document.querySelector('video');
     const observer2 = new MutationObserver((mutationsList, observer) => {
-            setTimeout(() => {
-            console.log(`Remove short video1`);
-            removeShortVideoAndAd();
-        }, 3000);
+        startTimer();
     });
     observer2.observe(videoElement, {attributes: true, attributeFilter: ['src']});
 })();
@@ -57,7 +64,6 @@ function removeShortVideoAndAd() {
     })
     document.querySelectorAll('.video-page-special-card-small').forEach((card) => card.remove());
     // remove the ai 小助手
-    setTimeout(() => {
         if (document.querySelector('.video-ai-assistant')) {
             document.querySelector('.video-ai-assistant').remove();
         }
@@ -72,9 +78,9 @@ function removeShortVideoAndAd() {
         if (document.querySelector('.bpx-player-ending-wrap')){
             document.querySelector('.bpx-player-ending-wrap').remove();
         }
-        }, 500);
 
-    ;
+
+
 }
 
 
